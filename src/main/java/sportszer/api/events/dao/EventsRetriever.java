@@ -1,6 +1,15 @@
 package sportszer.api.events.dao;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
+
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig.SaveBehavior;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 
 import sportszer.api.events.bean.Event;
 
@@ -13,34 +22,54 @@ import sportszer.api.events.bean.Event;
 @Repository
 public class EventsRetriever {
 
+	/**
+	 * TODO Inject env specific AmazonDynamoDBClient bean
+	 * 
+	 * Workstation client - AmazonDynamoDBClient client = new
+	 * AmazonDynamoDBClient().withEndpoint("http://localhost:8000");
+	 */
+	AmazonDynamoDBClient client = new AmazonDynamoDBClient().withRegion(Regions.US_WEST_2);
+
+	/**
+	 * @return all Sportszer Events
+	 */
 	public Event[] retrieveEvents() {
 
-		/*
-		 * AmazonDynamoDBClient client = new
-		 * AmazonDynamoDBClient().withEndpoint("http://localhost:8000");
-		 * DynamoDB dynamoDB = new DynamoDB(client); Table table =
-		 * dynamoDB.getTable("Event");
-		 * 
-		 * String eventId = "123456789"; GetItemSpec spec = new
-		 * GetItemSpec().withPrimaryKey("eventId", eventId);
-		 * 
-		 * try { System.out.println("Attempting to read the item..."); Item
-		 * outcome = table.getItem(spec); System.out.println(
-		 * "GetItem succeeded: " + outcome);
-		 * 
-		 * } catch (Exception e) { System.err.println("Unable to read item: " +
-		 * eventId); System.err.println(e.getMessage()); }
-		 */
+		DynamoDBMapper dbMapper = new DynamoDBMapper(client);
 
-		Event[] events = new Event[2];
+		List<Event> eventList = dbMapper.scan(Event.class, new DynamoDBScanExpression());
+		Event[] events = new Event[eventList.size()];
 
-		events[0] = buildEvent("Mighty Kids 1", "Taekwando introduction to Kids");
-		events[1] = buildEvent("Mighty Kids 2", "Taekwando for experienced Kids");
-
-		return events;
+		return eventList.toArray(events);
 	}
 
-	private Event buildEvent(String name, String description) {
-		return new Event(name, description);
+	/**
+	 * Add a Sportszer Event
+	 * 
+	 * @param event
+	 */
+	public void addEvent(Event event) {
+		DynamoDBMapper dbMapper = new DynamoDBMapper(client);
+		dbMapper.save(event);
+	}
+
+	/**
+	 * Update a Sportszer Event
+	 * 
+	 * @param event
+	 */
+	public void updateEvent(Event event) {
+		DynamoDBMapper dbMapper = new DynamoDBMapper(client);
+		dbMapper.save(event, new DynamoDBMapperConfig(SaveBehavior.CLOBBER));
+	}
+
+	/**
+	 * Delete a Sportszer Event
+	 * 
+	 * @param event
+	 */
+	public void deleteEvent(Event event) {
+		DynamoDBMapper dbMapper = new DynamoDBMapper(client);
+		dbMapper.delete(event);
 	}
 }

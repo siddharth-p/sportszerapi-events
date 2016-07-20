@@ -1,6 +1,10 @@
 package sportszer.api.events.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,8 +33,31 @@ public class EventsController {
 	@ApiOperation(value = "Retrieve Events")
 	@RequestMapping(method = RequestMethod.GET, path = "/events", produces = "application/json")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success", response = Event.class) })
-	public Event[] retrieveEvents() {
-		return eventsRetriever.retrieveEvents();
+	public HttpEntity<Event[]> retrieveEvents() {
+		return new ResponseEntity<Event[]>(eventsRetriever.retrieveEvents(), HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "Add Event")
+	@RequestMapping(method = RequestMethod.POST, path = "/events", consumes = "application/json")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success") })
+	public HttpStatus addEvent(@RequestBody Event event) {
+		eventsRetriever.addEvent(event);
+		return HttpStatus.OK;
+	}
+
+	@ApiOperation(value = "Update Event")
+	@RequestMapping(method = RequestMethod.PUT, path = "/events", consumes = "application/json")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success") })
+	public HttpStatus updateEvent(@RequestBody Event event) {
+		eventsRetriever.updateEvent(event);
+		return HttpStatus.OK;
+	}
+
+	@ApiOperation(value = "Delete Event")
+	@RequestMapping(method = RequestMethod.DELETE, path = "/events", consumes = "application/json")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success") })
+	public HttpStatus deleteEvent(@RequestBody Event event) {
+		eventsRetriever.deleteEvent(event);
+		return HttpStatus.OK;
+	}
 }

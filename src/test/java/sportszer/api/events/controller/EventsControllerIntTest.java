@@ -1,13 +1,17 @@
 package sportszer.api.events.controller;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
-
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TimeZone;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -22,18 +26,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import sportszer.api.events.EventsApplication;
 import sportszer.api.events.bean.Event;
+import sportszer.api.events.bean.EventLocation;
+import sportszer.api.events.bean.EventRecurrence;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = EventsApplication.class)
 @WebAppConfiguration
-@IntegrationTest({"server.port=0"})
+@IntegrationTest({ "server.port=0" })
+@Ignore
 public class EventsControllerIntTest {
 
-    @Value("${local.server.port}")
-    private int port;
+	@Value("${local.server.port}")
+	private int port;
 
 	private URL base;
 	private RestTemplate template;
+	
+	private Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
 
 	@Before
 	public void setUp() throws Exception {
@@ -41,22 +50,31 @@ public class EventsControllerIntTest {
 		template = new TestRestTemplate();
 	}
 
-	@Test
+	@Test	
 	public void getHello() throws Exception {
 		ResponseEntity<String> response = template.getForEntity(base.toString(), String.class);
-		assertThat(response.getBody(), equalTo(getEvents()));
+		JSONAssert.assertEquals(getJSON(getEvents()), response.getBody(), true);
 	}
-	
-	private String getEvents() throws JsonProcessingException{
+
+	private Event[] getEvents() {
 		Event[] events = new Event[2];
 		events[0] = buildEvent("Mighty Kids 1", "Taekwando introduction to Kids");
 		events[1] = buildEvent("Mighty Kids 2", "Taekwando for experienced Kids");
 
-		ObjectMapper mapper = new ObjectMapper();
-		return mapper.writeValueAsString(events);
+		return events;
 	}
-	
-	private Event buildEvent(String name, String description) {
-		return new Event(name, description);
+
+	private String getJSON(Object object) throws JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.writeValueAsString(object);
+	}
+
+	private Event buildEvent(String name, String description) {		
+		String[] recurrenceDaysArray = { "Monday", "Wednesday" };
+		Set<String> recurrenceDays = new HashSet<String>(Arrays.asList(recurrenceDaysArray));
+
+		return new Event(name, description, "Summer", true,
+				new EventLocation("Ekstam Dr", "Bloomington", "IL", "61705"), calendar.getTime(), calendar.getTime(),
+				"1800", "1900", new EventRecurrence("Weekly", recurrenceDays));
 	}
 }
