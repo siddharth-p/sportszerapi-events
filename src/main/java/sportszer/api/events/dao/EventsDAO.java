@@ -20,7 +20,7 @@ import sportszer.api.events.bean.Event;
  * @since May 20, 2016
  */
 @Repository
-public class EventsRetriever {
+public class EventsDAO {
 
 	/**
 	 * TODO Inject env specific AmazonDynamoDBClient bean

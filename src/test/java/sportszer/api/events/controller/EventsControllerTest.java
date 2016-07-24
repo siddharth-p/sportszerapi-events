@@ -31,7 +31,7 @@ import sportszer.api.events.EventsApplication;
 import sportszer.api.events.bean.Event;
 import sportszer.api.events.bean.EventLocation;
 import sportszer.api.events.bean.EventRecurrence;
-import sportszer.api.events.dao.EventsRetriever;
+import sportszer.api.events.dao.EventsDAO;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes=EventsApplication.class, locations={"/mock-applicationContext.xml"})
@@ -41,7 +41,7 @@ public class EventsControllerTest {
 	private MockMvc mvc;	
 
 	@Autowired
-	private EventsRetriever mockEventsRetriever;
+	private EventsDAO mockEventsDAO;
 
 	@Autowired
 	private WebApplicationContext context;
@@ -51,12 +51,12 @@ public class EventsControllerTest {
 	@Before
 	public void setUp() throws Exception {
 		mvc = MockMvcBuilders.webAppContextSetup(context).build();
-		EasyMock.reset(mockEventsRetriever);
+		EasyMock.reset(mockEventsDAO);
 	}
 	
 	@After
 	public void tearDOwn(){
-		EasyMock.verify(mockEventsRetriever);
+		EasyMock.verify(mockEventsDAO);
 	}
 
 	@Test
@@ -114,32 +114,32 @@ public class EventsControllerTest {
 	}	
 	
 	private void setAddEventMockExpectations(Event event) {
-		mockEventsRetriever.addEvent(event);
+		mockEventsDAO.addEvent(event);
 		EasyMock.expectLastCall();
-		EasyMock.replay(mockEventsRetriever);
+		EasyMock.replay(mockEventsDAO);
 	}
 	
 	private void setUpdateEventMockExpectations(Event event) {
-		mockEventsRetriever.updateEvent(event);
+		mockEventsDAO.updateEvent(event);
 		EasyMock.expectLastCall();
-		EasyMock.replay(mockEventsRetriever);
+		EasyMock.replay(mockEventsDAO);
 	}	
 	
 	private void setUpdateEventMockExpectationsToThrowException(Event event) {
-		mockEventsRetriever.updateEvent(event);
+		mockEventsDAO.updateEvent(event);
 		EasyMock.expectLastCall().andThrow(new RuntimeException());
-		EasyMock.replay(mockEventsRetriever);
+		EasyMock.replay(mockEventsDAO);
 	}
 	
 	private void setDeleteEventMockExpectations(Event event) {
-		mockEventsRetriever.deleteEvent(event);
+		mockEventsDAO.deleteEvent(event);
 		EasyMock.expectLastCall();
-		EasyMock.replay(mockEventsRetriever);
+		EasyMock.replay(mockEventsDAO);
 	}
 
 	private void setRetrieveEventsMockExpectations() {
-		EasyMock.expect(mockEventsRetriever.retrieveEvents()).andReturn(getEvents());
-		EasyMock.replay(mockEventsRetriever);
+		EasyMock.expect(mockEventsDAO.retrieveEvents()).andReturn(getEvents());
+		EasyMock.replay(mockEventsDAO);
 	}
 
 	private Event[] getEvents() {

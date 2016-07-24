@@ -14,7 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import sportszer.api.events.bean.Event;
-import sportszer.api.events.dao.EventsRetriever;
+import sportszer.api.events.dao.EventsDAO;
 
 /**
  * Defines Sportszer Events API
@@ -28,20 +28,20 @@ import sportszer.api.events.dao.EventsRetriever;
 public class EventsController {
 
 	@Autowired
-	private EventsRetriever eventsRetriever;
+	private EventsDAO eventsDAO;
 
 	@ApiOperation(value = "Retrieve Events")
 	@RequestMapping(method = RequestMethod.GET, path = "/events", produces = "application/json")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success", response = Event.class) })
 	public HttpEntity<Event[]> retrieveEvents() {
-		return new ResponseEntity<Event[]>(eventsRetriever.retrieveEvents(), HttpStatus.OK);
+		return new ResponseEntity<Event[]>(eventsDAO.retrieveEvents(), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Add Event")
 	@RequestMapping(method = RequestMethod.POST, path = "/events", consumes = "application/json")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success") })
 	public HttpStatus addEvent(@RequestBody Event event) {
-		eventsRetriever.addEvent(event);
+		eventsDAO.addEvent(event);
 		return HttpStatus.OK;
 	}
 
@@ -49,7 +49,7 @@ public class EventsController {
 	@RequestMapping(method = RequestMethod.PUT, path = "/events", consumes = "application/json")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success") })
 	public HttpStatus updateEvent(@RequestBody Event event) {
-		eventsRetriever.updateEvent(event);
+		eventsDAO.updateEvent(event);
 		return HttpStatus.OK;
 	}
 
@@ -57,7 +57,7 @@ public class EventsController {
 	@RequestMapping(method = RequestMethod.DELETE, path = "/events", consumes = "application/json")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success") })
 	public HttpStatus deleteEvent(@RequestBody Event event) {
-		eventsRetriever.deleteEvent(event);
+		eventsDAO.deleteEvent(event);
 		return HttpStatus.OK;
 	}
 }

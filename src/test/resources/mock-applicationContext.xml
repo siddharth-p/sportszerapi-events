@@ -4,8 +4,8 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd">
 
 
-	<bean id="eventsRetrieverMock" class="org.easymock.EasyMock" factory-method="createMock" primary="true">
-		<constructor-arg value="sportszer.api.events.dao.EventsRetriever" />
+	<bean id="eventsDAOMock" class="org.easymock.EasyMock" factory-method="createMock" primary="true">
+		<constructor-arg value="sportszer.api.events.dao.EventsDAO" />
 	</bean>
 
 </beans>

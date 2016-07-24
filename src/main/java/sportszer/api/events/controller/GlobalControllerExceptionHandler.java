@@ -10,14 +10,13 @@ public class GlobalControllerExceptionHandler {
 
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(Exception.class)
-	public void handleExceptions() {
-		// Nothing to do - only used to set HTTP status code
+	public String handleExceptions(Exception e) {
+		return e.getMessage();
 	}
 
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(RuntimeException.class)
-	public void handleRuntimeExceptions() {
-		// Nothing to do - only used to set HTTP status code
+	public String handleRuntimeExceptions(RuntimeException e) {
+		return e.getMessage();
 	}
-
 }
