@@ -32,11 +32,11 @@ public class LoadEventTable {
 
 		Event event1 = new Event("Mighty Kids 1", "Taekwando for toddlers", "Summer", true,
 				new EventLocation("Ekstam Dr", "Bloomington", "IL", "61705"), calendar.getTime(), calendar.getTime(),
-				"1800", "1900", new EventRecurrence("Weekly", recurrenceDays));
+				"1800", "1900", new EventRecurrence("Weekly", recurrenceDays),"9dc9b3de-0bd1-4186-ad3f-6be47a1ec524");
 
 		Event event2 = new Event("Soccer for Tots", "Soccer for toddlers", "Summer", true,
 				new EventLocation("Ekstam Dr", "Bloomington", "IL", "61705"), calendar.getTime(), calendar.getTime(),
-				"1800", "1900", new EventRecurrence("Weekly", recurrenceDays));
+				"1800", "1900", new EventRecurrence("Weekly", recurrenceDays),"9dc9b3de-0bd1-4186-ad3f-6be47a1ec524");
 
 		List<FailedBatch> failedBatchs = mapper.batchSave(Arrays.asList(event1, event2));
 		

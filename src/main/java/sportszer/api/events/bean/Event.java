@@ -66,11 +66,16 @@ public class Event {
 	@DynamoDBAttribute
 	private EventRecurrence recurrence;
 
+	@ApiModelProperty(value = "Organization Id", required = true)
+	@DynamoDBAttribute
+	private String organizationId;
+
 	public Event() {
 	}
 
-	public Event(String name, String description, String session, boolean publicInd, EventLocation location,
-			Date startDate, Date endDate, String startTime, String endTime, EventRecurrence recurrence) {
+	public Event(String name, String description, String session, boolean publicInd,
+			EventLocation location, Date startDate, Date endDate, String startTime, String endTime,
+			EventRecurrence recurrence, String organizationId) {			
 		this.name = name;
 		this.description = description;
 		this.session = session;
@@ -81,6 +86,7 @@ public class Event {
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.recurrence = recurrence;
+		this.organizationId = organizationId;
 	}
 
 	public String getName() {
@@ -171,11 +177,20 @@ public class Event {
 		this.eventId = eventId;
 	}
 
+	public String getOrganizationId() {
+		return organizationId;
+	}
+
+	public void setOrganizationId(String organizationId) {
+		this.organizationId = organizationId;
+	}
+
 	@Override
 	public String toString() {
 		return "Event [eventId=" + eventId + ", name=" + name + ", description=" + description + ", session=" + session
 				+ ", publicInd=" + publicInd + ", location=" + location + ", startDate=" + startDate + ", endDate="
-				+ endDate + ", startTime=" + startTime + ", endTime=" + endTime + ", recurrence=" + recurrence + "]";
+				+ endDate + ", startTime=" + startTime + ", endTime=" + endTime + ", recurrence=" + recurrence
+				+ ", organizationId=" + organizationId + "]";
 	}
 
 	@Override
@@ -188,6 +203,7 @@ public class Event {
 		result = prime * result + ((eventId == null) ? 0 : eventId.hashCode());
 		result = prime * result + ((location == null) ? 0 : location.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((organizationId == null) ? 0 : organizationId.hashCode());
 		result = prime * result + (publicInd ? 1231 : 1237);
 		result = prime * result + ((recurrence == null) ? 0 : recurrence.hashCode());
 		result = prime * result + ((session == null) ? 0 : session.hashCode());
@@ -234,6 +250,11 @@ public class Event {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
+			return false;
+		if (organizationId == null) {
+			if (other.organizationId != null)
+				return false;
+		} else if (!organizationId.equals(other.organizationId))
 			return false;
 		if (publicInd != other.publicInd)
 			return false;

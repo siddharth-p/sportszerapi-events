@@ -161,6 +161,6 @@ public class EventsControllerTest {
 
 		return new Event(name, description, "Summer", true,
 				new EventLocation("Ekstam Dr", "Bloomington", "IL", "61705"), calendar.getTime(), calendar.getTime(),
-				"1800", "1900", new EventRecurrence("Weekly", recurrenceDays));
+				"1800", "1900", new EventRecurrence("Weekly", recurrenceDays), "1234");
 	}
 }
